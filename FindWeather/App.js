@@ -1,12 +1,17 @@
-import React, {useState } from 'react';
+'use strict';
+import React, {useState, Component } from 'react';
 import { StyleSheet, TextInput, Button, View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import WeatherLoc from './components/WeatherLoc';
 import WeatherCity from './components/WeatherCity';
+import CameraScreen from './components/CameraScreen';
 
 
-function HomeScreen({ navigation }) {
+class HomeScreen extends Component {
+  render(){
+    const { navigation } = this.props;
+    
   return (
     <View style={styles.container}>
       <Button
@@ -19,9 +24,17 @@ function HomeScreen({ navigation }) {
         style={styles.button}
         onPress={() => { navigation.navigate('WeatherInput'); } }
       />
+      <Button
+        title="Take a picture"
+        style={styles.button}
+        onPress={() => { navigation.navigate('TakePicture'); } }
+      />
     </View>
   );
-}
+  } 
+}//end of HomeScreen class
+
+
 
 function WeatherLocScreen({navigation}) {
   return (
@@ -80,6 +93,13 @@ function WeatherCityScreen({route, navigation}) {
   );
   }
     
+function TakePictureScreen(){
+  return(
+    <View style={styles.container2}>
+      <CameraScreen/>
+    </View>
+  );
+}
 const Stack = createStackNavigator();
 
 function App() {
@@ -102,6 +122,10 @@ function App() {
         name="WeatherCity" 
         component={WeatherCityScreen} 
         options={{ title: 'Weather In City' }}/>
+        <Stack.Screen 
+        name="TakePicture" 
+        component={TakePictureScreen} 
+        options={{ title: 'Take a Picture' }}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -43,6 +43,8 @@
 	<key>NSLocationWhenInUseUsageDescription - 2</key>
 	<string>Location Permission</string>
 	<key>NSAppTransportSecurity</key>
+	<key>NSCameraUsageDescription</key>
+	<string>Your message to user when the camera is accessed for the first time</string>	
 	<dict/>
 </dict>
 </plist>
