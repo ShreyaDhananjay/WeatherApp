@@ -1,7 +1,7 @@
 import React, { useEffect, useState, Component } from 'react';
 import { ActivityIndicator, StyleSheet, TextInput, Button, View, Text, Platform } from 'react-native';
 
-export default WeatherCity = ({ city, statename, country }) => {
+export default WeatherCity = ({ city, country }) => {
     
     const [isLoading, setLoading] = useState(true);
     const [data, setData] = useState([]);
@@ -19,14 +19,13 @@ export default WeatherCity = ({ city, statename, country }) => {
     };
     
         if(Platform.OS = "android")
-        var url = 'http://10.0.2.2:8082/weather?city=' + city.city;
+        var url = 'http://10.0.2.2:8082/weather?city=' + city;
         else
-        var url = 'http://127.0.0.1:8082/weather?city=' + city.city;
-        if(statename.statename != undefined)
-        url+="&statecode=" + statename.statename;
-        if(country.country != undefined)
-        url+="&countrycode=" + country.country;
-        
+        var url = 'http://127.0.0.1:8082/weather?city=' + city;
+        url+="&country=" + country;
+        //console.log(country);
+        //console.log(city);
+        //console.log(url);
 
         useEffect(() => {
           fetch(url)
@@ -39,7 +38,7 @@ export default WeatherCity = ({ city, statename, country }) => {
         
         return (
             <View style={styles.container2}>
-            <Text style={styles.text}>The weather in {city.city} is:</Text>
+            <Text style={styles.text}>The weather in {city} is:</Text>
             {isLoading ? <ActivityIndicator/> : (
             <View style={styles.container2}>
               <Text style={styles.text2}>Main: {data.weather[0].main}</Text>
@@ -54,6 +53,7 @@ export default WeatherCity = ({ city, statename, country }) => {
             </View>
             )}
             </View>
+            
         );
     }
     

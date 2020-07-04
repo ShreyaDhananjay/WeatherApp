@@ -43,14 +43,11 @@ public class WeatherApplication {
 
 	
 	@RequestMapping("/weather")
-	public String weather(@RequestParam String city, @RequestParam(required = false) String statecode, @RequestParam(required=false) String countrycode ) {
+	public String weather(@RequestParam String city, @RequestParam(required=false) String country ) {
 		String apiKey = System.getenv("APIKEY");
 		String querystr = "https://api.openweathermap.org/data/2.5/weather?q=" + city;
-		if(statecode != null) {
-			querystr += "," + statecode;
-			if(countrycode != null) 
-			querystr += "," + countrycode;	
-		}
+		if(country != null) 
+		querystr += "," + country;	
 		querystr += "&APPID=" + apiKey + "&units=metric";
 		String result = restTemplate.getForObject(querystr, String.class);
 		JSONObject w = new JSONObject(result);

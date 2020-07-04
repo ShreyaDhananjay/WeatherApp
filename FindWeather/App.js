@@ -3,9 +3,11 @@ import React, {useState, Component } from 'react';
 import { StyleSheet, TextInput, Button, View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { Picker } from '@react-native-community/picker';
 import WeatherLoc from './components/WeatherLoc';
 import WeatherCity from './components/WeatherCity';
 import CameraScreen from './components/CameraScreen';
+import cities from './cities.json';
 
 
 class HomeScreen extends Component {
@@ -42,52 +44,60 @@ function WeatherLocScreen({navigation}) {
 		<WeatherLoc/>
 		<Button
 			title="Check Another City"
-			onPress={() => { navigation.navigate('Home'); } }
+			onPress={() => { navigation.navigate('WeatherInput'); } }
 		/>
     </View>
   );
 }
-function WeatherInputScreen({navigation}) {
-	const [city, setCity] = useState('Mumbai');
-  const [statename, setStatename] = useState();
-  const [country, setCountry] = useState();
+class WeatherInputScreen extends Component {
+  state = {
+    city: 'Mumbai',
+    country: 'India'
+  }
+  render(){
+    const { navigation } = this.props;
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Type the name of a city to get the weather!</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="e.g. Mumbai"
-        onChangeText={(val) => setCity(val)}
-        />
-        <TextInput
-        style={styles.input}
-        placeholder="Statecode (optional)"
-        onChangeText={(val) => setStatename(val)}
-        />
-        <TextInput
-        style={styles.input}
-        placeholder="Countrycode (optional)"
-        onChangeText={(val) => setCountry(val)}
-        />
+      <Text style={styles.text}>Select a city to get the weather!</Text>
+      <Text style={styles.text}>Country: </Text>
+        <Picker
+          style={{height: 100, width: 200, fontWeight: 'bold', fontSize: 20, color: 'steelblue'}}
+          selectedValue={this.state.country}
+          mode="dropdown"
+          onValueChange={(itemValue, itemIndex)=>{this.setState({country: itemValue})}}>
+          {Object.keys(cities).map((key) => {
+              return (<Picker.Item label={key} value={key} key={key}/>) 
+          })}
+        </Picker>
+        <Text style={styles.text}>City: </Text>
+        <Picker
+          style={{height: 100, width: 200, fontWeight: 'bold', fontSize: 20, color: 'steelblue'}}
+          selectedValue={this.state.city}
+          mode="dropdown"
+          onValueChange={(itemValue, itemIndex)=>{this.setState({city: itemValue})}}>
+          {cities[this.state.country].map((item, index) => {
+              return (<Picker.Item label={item} value={item} key={index}/>) 
+          })}
+        </Picker>
       <Button
         title="Check Weather"
-        onPress={() => { navigation.navigate('WeatherCity', {cityname: {city}, statename: {statename}, country:{country} }); } }
+        onPress={() => { navigation.navigate('WeatherCity', {cityname: this.state.city, country:this.state.country }); } }
       />
     </View>
   );
   }
+}
 
 function WeatherCityScreen({route, navigation}) {
   const { cityname } = route.params;
-  const { statename } = route.params;
   const { country } = route.params;
-  
+  //console.log(cityname);
   return (
     <View style={styles.container2}>
-      <WeatherCity city={cityname} statename={statename} country={country}/>
+      <WeatherCity city={cityname} country={country}/>
     <Button
       title="Check Another City"
-      onPress={() => { navigation.navigate('Home'); } }
+      onPress={() => { navigation.navigate('WeatherInput'); } }
     />
     </View>
   );
@@ -156,6 +166,12 @@ const styles = StyleSheet.create({
     },
     text2: {
       fontSize: 20,
+      color: 'steelblue'
+    },
+    text: {
+      fontWeight: 'bold',
+      fontSize: 30,
+      textAlign: 'center',
       color: 'steelblue'
     },
     input: {
