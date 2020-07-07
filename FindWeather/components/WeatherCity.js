@@ -1,5 +1,5 @@
 import React, { useEffect, useState, Component } from 'react';
-import { ActivityIndicator, StyleSheet, TextInput, Button, View, Text, Platform } from 'react-native';
+import { ActivityIndicator, StyleSheet, View, Text, Platform } from 'react-native';
 
 export default WeatherCity = ({ city, country }) => {
     

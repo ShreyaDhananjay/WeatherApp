@@ -41,9 +41,14 @@ public class WeatherApplication {
 	@Autowired
 	private ImageRepository imageRepository;
 
+	@Autowired
+	private SavedCitiesRepository savedCitiesRepository;
+
 	
 	@RequestMapping("/weather")
 	public String weather(@RequestParam String city, @RequestParam(required=false) String country ) {
+		SavedCities sc = new SavedCities(1, city, country);
+		savedCitiesRepository.save(sc);
 		String apiKey = System.getenv("APIKEY");
 		String querystr = "https://api.openweathermap.org/data/2.5/weather?q=" + city;
 		if(country != null) 
@@ -90,10 +95,28 @@ public class WeatherApplication {
 		weatherRepository.save(weather);
 	}
 
+	@RequestMapping("/deletecity")
+	public String deleteCity(@RequestParam String city, @RequestParam String country ) {
+		Cities c = new Cities(1,city,country);
+		if(savedCitiesRepository.existsById(c))
+		{
+			savedCitiesRepository.deleteById(c);
+			System.out.println("deleted");
+			return "deleted";
+		}
+		else
+		return "nothing to delete";
+	}
+
 	@RequestMapping("/getweatherlog")
 	public @ResponseBody Iterable<Weather> getAllUsers() {
 		return weatherRepository.findAll();
 	  }
+
+	  @RequestMapping("/getsavedcities")
+	  public @ResponseBody Iterable<SavedCities> getAllSavedCities() {
+		  return savedCitiesRepository.findAll();
+		}
 
 	@RequestMapping(value = "/getimage")
 	public @ResponseBody String getimage(@RequestParam("imageFile") String imageValue){
