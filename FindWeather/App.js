@@ -127,7 +127,7 @@ function SavedCitiesScreen({navigation}){
         .then((response) => response.json())
         .then((json) => setData(json))
         .catch((error) => console.error(error))
-    }, []);
+    });
 
   return(
     data.map((item, index) => {
@@ -144,7 +144,7 @@ function SavedCitiesScreen({navigation}){
             else
             var url2 = 'http://127.0.0.1:8082/deletecity?city=';
             url2 += item.city + "&country=" + item.country;
-            fetch(url2).then((response) => response.toString()).then(navigation.navigate('Home'));
+            fetch(url2).then((response) => response.toString()).then(navigation.navigate('SavedCities'));
             }}/>
        </View>;
    }
